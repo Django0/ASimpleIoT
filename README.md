@@ -6,3 +6,6 @@ A simple IoT demo based on NodeMcu, mqtt over WiFi
 * https://learn.adafruit.com/mqtt-adafruit-io-and-you/arduino-plus-library-setup
 * MQTT client and Dashboard on phone: https://play.google.com/store/apps/details?id=snr.lab.iotmqttpanel.prod
 * MQTT broker or server: (On linux/ubuntu machine use apt-get) or on the phone use https://play.google.com/store/apps/details?id=server.com.mqtt
+
+A Simple Ciruit
+![A simple circuit diagram](https://github.com/Django0/ASimpleIoT/blob/master/ASimpleIoTCircuitDiagram_bb.png)
