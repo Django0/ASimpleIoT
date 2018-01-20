@@ -34,8 +34,11 @@
 /************ Global State (you don't need to change this!) ******************/
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-int ledBlue = D1; 
-int ledRed = D2; 
+const int ledBlue = D1; 
+const int ledRed = D2; 
+const int readLedGreenInterruptPin = D4;
+uint32_t pressedCount=0;
+uint32_t x=0;
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Create an ESP8266 WiFiClient class to connect to the MQTT server.
 WiFiClient client;
@@ -50,6 +53,7 @@ Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO
 // Setup a feed called 'photocell' for publishing.
 // Notice MQTT paths for AIO follow the form: <username>/feeds/<feedname>
 Adafruit_MQTT_Publish photocell = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/photocell");
+Adafruit_MQTT_Publish physicalButton = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/physicalButton");
 
 // Setup a feed called 'onoff' for subscribing to changes.
 Adafruit_MQTT_Subscribe onoffbuttonBlue = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/feeds/onoffblue");
@@ -60,7 +64,18 @@ Adafruit_MQTT_Subscribe onoffbuttonRed = Adafruit_MQTT_Subscribe(&mqtt, AIO_USER
 // Bug workaround for Arduino 1.6.6, it seems to need a function declaration
 // for some reason (only affects ESP8266, likely an arduino-builder bug).
 void MQTT_connect();
-
+//##############################################################################################
+void buttonInterrupted() {
+    Serial.print(F("\nSending physical button state = "));
+    Serial.print(++pressedCount);
+    Serial.print("...");
+    if (! physicalButton.publish(pressedCount)) {
+      Serial.println(F("Failed"));
+    } else {
+      Serial.println(F("OK!"));
+    }
+}
+//##############################################################################################
 void setup() {
   Serial.begin(115200);
   delay(10);
@@ -89,6 +104,7 @@ void setup() {
   
   pinMode(ledBlue, OUTPUT);
   pinMode(ledRed, OUTPUT);
+  pinMode(readLedGreenInterruptPin, INPUT);
   
   digitalWrite(ledBlue, HIGH);
   delay(1000);  
@@ -97,8 +113,7 @@ void setup() {
   
 }
 
-uint32_t x=0;
-
+//##############################################################################################
 void loop() {
   // Ensure the connection to the MQTT server is alive (this will make the first
   // connection and automatically reconnect when disconnected).  See the MQTT_connect
@@ -147,7 +162,7 @@ void loop() {
   }
   */
 }
-
+//##############################################################################################
 // Function to connect and reconnect as necessary to the MQTT server.
 // Should be called in the loop function and it will take care if connecting.
 void MQTT_connect() {
@@ -173,4 +188,5 @@ void MQTT_connect() {
        }
   }
   Serial.println("MQTT Connected!");
+  attachInterrupt(digitalPinToInterrupt(readLedGreenInterruptPin), buttonInterrupted, HIGH);  // CHANGE is too fast!
 }
