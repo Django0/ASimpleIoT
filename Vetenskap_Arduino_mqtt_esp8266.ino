@@ -20,13 +20,12 @@
 #include "Adafruit_MQTT_Client.h"
 
 /************************* WiFi Access Point *********************************/
-
+// Last updated: 2018-01-22
 #define WLAN_SSID       ""
 #define WLAN_PASS       ""
 
 /************************* Adafruit.io Setup *********************************/
-
-#define AIO_SERVER      "192.168.0.104"
+#define AIO_SERVER      "192.168.42.235"
 #define AIO_SERVERPORT  1883                   // use 8883 for SSL
 #define AIO_USERNAME    ""
 #define AIO_KEY         ""
