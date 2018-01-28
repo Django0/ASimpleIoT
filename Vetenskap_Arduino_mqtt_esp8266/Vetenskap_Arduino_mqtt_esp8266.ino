@@ -21,8 +21,8 @@
 
 /************************* WiFi Access Point *********************************/
 // Last updated: 2018-01-22
-#define WLAN_SSID       ""
-#define WLAN_PASS       ""
+#define WLAN_SSID       "tintin"
+#define WLAN_PASS       "56781234"
 /************************* Adafruit.io Setup *********************************/
 #define AIO_SERVER      "192.168.43.182"
 #define AIO_SERVERPORT  1883                   // use 8883 for SSL
@@ -35,6 +35,7 @@
 const int ledBlue = D1;
 const int ledRed = D2;
 const int readLedGreenInterruptPin = D4;
+const int christmasLights = D3;
 uint32_t pressedCount = 0;
 uint32_t localPressedCount = pressedCount;
 uint32_t x = 0;
@@ -100,8 +101,10 @@ void setup() {
 
   pinMode(ledBlue, OUTPUT);
   pinMode(ledRed, OUTPUT);
+  pinMode(christmasLights, OUTPUT);
   pinMode(readLedGreenInterruptPin, INPUT);
 
+  digitalWrite(christmasLights, LOW);
   digitalWrite(ledBlue, HIGH);
   delay(1000);
   digitalWrite(ledBlue, LOW);
@@ -126,8 +129,10 @@ void loop() {
       Serial.println((char *)onoffbuttonBlue.lastread);
       if (0 == strcmp((const char*)onoffbuttonBlue.lastread, "1")) {
         digitalWrite(ledBlue, HIGH);
+        digitalWrite(christmasLights, HIGH);
       } else {
         digitalWrite(ledBlue, LOW);
+        digitalWrite(christmasLights, LOW);
       }
     }
 
