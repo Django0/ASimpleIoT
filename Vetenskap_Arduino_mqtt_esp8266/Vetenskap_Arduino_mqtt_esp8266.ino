@@ -24,7 +24,7 @@
 #define WLAN_SSID       "tintin"
 #define WLAN_PASS       "56781234"
 /************************* Adafruit.io Setup *********************************/
-#define AIO_SERVER      "192.168.43.182"
+#define AIO_SERVER      "192.168.43.34"
 #define AIO_SERVERPORT  1883                   // use 8883 for SSL
 #define AIO_USERNAME    ""
 #define AIO_KEY         ""
@@ -56,12 +56,12 @@ Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO
 // Setup a feed called 'heartbeat' for publishing.
 // Notice MQTT paths for AIO follow the form: <username>/feeds/<feedname>
 Adafruit_MQTT_Publish heartbeat = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/heartbeat");
-Adafruit_MQTT_Publish physicalButton = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/physicalButton");
+Adafruit_MQTT_Publish physicalButton = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/physicalbutton");
 Adafruit_MQTT_Publish temperatureReadOut = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/temp");
 
 // Setup a feed called 'onoff' for subscribing to changes.
 Adafruit_MQTT_Subscribe onoffbuttonBlue = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/feeds/onoffblue");
-Adafruit_MQTT_Subscribe onoffbuttonRed = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/feeds/onoffred");
+Adafruit_MQTT_Subscribe onoffbuttonRed = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/feeds/redslider");
 
 /*************************** Sketch Code ************************************/
 
@@ -110,6 +110,8 @@ void setup() {
   digitalWrite(ledBlue, LOW);
   delay(1000);
   attachInterrupt(digitalPinToInterrupt(readLedGreenInterruptPin), buttonInterrupted, HIGH);  // CHANGE is too fast!
+
+  digitalWrite(temperatureSensorPin, INPUT_PULLUP);
 }
 
 //##############################################################################################
@@ -174,7 +176,7 @@ void loop() {
   Serial.print("sensor Value: ");
   Serial.print(sensorVal);
   // convert the ADC reading to voltage
-  float voltage = (sensorVal / 1024.0) * 3.1;
+  float voltage = (sensorVal / 1024.0) * 3.3;
   // Send the voltage level out the Serial port
   Serial.print(", Volts: ");
   Serial.print(voltage);
