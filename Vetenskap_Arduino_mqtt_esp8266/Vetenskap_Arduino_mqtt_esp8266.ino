@@ -21,10 +21,10 @@
 
 /************************* WiFi Access Point *********************************/
 // Last updated: 2018-01-22
-#define WLAN_SSID       "tintin"
+#define WLAN_SSID       "IoTWorkshop"
 #define WLAN_PASS       "56781234"
 /************************* Adafruit.io Setup *********************************/
-#define AIO_SERVER      "192.168.43.34"
+#define AIO_SERVER      "192.168.1.100"
 #define AIO_SERVERPORT  1883                   // use 8883 for SSL
 #define AIO_USERNAME    ""
 #define AIO_KEY         ""
@@ -35,7 +35,7 @@
 const int ledBlue = D1;
 const int ledRed = D2;
 const int readLedGreenInterruptPin = D4;
-const int christmasLights = D3;
+const int christmasLights = D3;         // Task-1: Observe that the Christmas lights is mapped to pin D3
 uint32_t pressedCount = 0;
 uint32_t localPressedCount = pressedCount;
 uint32_t x = 0;
@@ -101,10 +101,12 @@ void setup() {
 
   pinMode(ledBlue, OUTPUT);
   pinMode(ledRed, OUTPUT);
-  pinMode(christmasLights, OUTPUT);
+  // Task-2: Enter one-line code below to https://www.arduino.cc/reference/en/language/functions/digital-io/pinmode/
+                          
   pinMode(readLedGreenInterruptPin, INPUT);
 
-  digitalWrite(christmasLights, LOW);
+  // Task-3: Startup with Christmas Lights being off, https://www.arduino.cc/reference/en/language/functions/digital-io/digitalwrite/
+
   digitalWrite(ledBlue, HIGH);
   delay(1000);
   digitalWrite(ledBlue, LOW);
@@ -131,10 +133,12 @@ void loop() {
       Serial.println((char *)onoffbuttonBlue.lastread);
       if (0 == strcmp((const char*)onoffbuttonBlue.lastread, "1")) {
         digitalWrite(ledBlue, HIGH);
-        digitalWrite(christmasLights, HIGH);
+        // Task-4: Now turn ON the Christmas lights
+
       } else {
         digitalWrite(ledBlue, LOW);
-        digitalWrite(christmasLights, LOW);
+        // Task-5: Now turn OFF the Christmas lights
+        
       }
     }
 
